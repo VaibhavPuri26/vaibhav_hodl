@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="60">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap" rel="stylesheet">
+    <title>Node.js Express Server</title>
+</head>
+<body>
+    <div class="header-container">
+        <h1 id="title">HODLINFO</h1>
+        <div class="buttons-group">
+            <div class="dropdown">
+                <button class="rounded-dropdown-btn">INR</button>
+                <div class="dropdown-content">
+                    <a href="#">INR</a>
+                </div>
+            </div>
+            <div class="dropdown2">
+                <button class="rounded-dropdown-btn2">BTC</button>
+                <div class="dropdown-content2">
+                    <a href="#">BTC</a>
+                    <a href="#">ETH</a>
+                    <a href="#">USDT</a>
+                    <a href="#">XRP</a>
+                    <a href="#">TRX</a>
+                    <a href="#">DASH</a>
+                    <a href="#">ZEC</a>
+                    <a href="#">XEM</a>
+                    <a href="#">IOST</a>
+                    <a href="#">WIN</a>
+                    <a href="#">BTT</a>
+                    <a href="#">WRX</a>
+                </div>
+            </div>
+            <button class="standalone-btn" onclick="window.location.href='your-link-here'">Buy BTC</button>
+        </div>
+    </div>
+    <div class="table">
+        <div class="row header-row">
+            <div class="cell">#</div>
+            <div class="cell">Name</div>
+            <div class="cell">Last</div>
+            <div class="cell">Buy</div>
+            <div class="cell">Sell</div>
+            <div class="cell">Volume</div>
+            <div class="cell">Base Unit</div>
+        </div>
+        <div id="ticker-container"></div>
+    </div>    
+    <script>
+        async function loadTickerData() {
+            try {
+                const response = await fetch('/api/ticker');
+                const ticker = await response.json();
+                const tickerContainer = document.getElementById('ticker-container');
+                ticker.forEach((item, index) => {
+                    const row = document.createElement('div');
+                    row.classList.add('row');
+                    row.innerHTML = `
+                        <div class="cell">${index + 1}</div>
+                        <div class="cell">${item.name}</div>
+                        <div class="cell">₹ ${parseFloat(item.last).toLocaleString('en-IN')}</div>
+                        <div class="cell">₹ ${parseFloat(item.buy).toLocaleString('en-IN')}</div>
+                        <div class="cell">₹ ${parseFloat(item.sell).toLocaleString('en-IN')}</div>
+                        <div class="cell">${parseFloat(item.volume).toLocaleString('en-IN')}</div>
+                        <div class="cell">${item.base_unit}</div>
+                    `;
+                    tickerContainer.appendChild(row);
+                });
+            } catch (error) {
+                console.error('Error fetching ticker data:', error);
+            }
+        }
+        loadTickerData();
+    </script>
+</body>
+</html>
